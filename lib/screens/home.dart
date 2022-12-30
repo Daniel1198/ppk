@@ -1,7 +1,9 @@
 import 'package:country_flags/country_flags.dart';
+import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:drop_down_list/drop_down_list.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -13,10 +15,38 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<Widget> screens = [];
   int currentScreen = 0;
+  String selectedLanguage = 'fr';
+  List<SelectedListItem> languages = [
+    SelectedListItem(name: 'Français', value: 'fr', isSelected: true),
+    SelectedListItem(name: 'Espagnol', value: 'es', isSelected: false),
+    SelectedListItem(name: 'Anglais', value: 'gb', isSelected: false),
+    SelectedListItem(name: 'Allemand', value: 'de', isSelected: false),
+  ];
+
+  void selectLanguage() {
+    DropDownState(DropDown(
+            bottomSheetTitle: Text(
+              'Langue',
+              style: GoogleFonts.ubuntu(
+                  fontWeight: FontWeight.bold, fontSize: 20.0),
+            ),
+            selectedItems: (selectedItem) {
+              for (var item in selectedItem) {
+                if (item is SelectedListItem) {
+                  setState(() {
+                    selectedLanguage = item.value!;
+                  });
+                }
+              }
+            },
+            data: languages))
+        .showModal(context);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black54),
         title: Text(
@@ -36,15 +66,28 @@ class _HomeState extends State<Home> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: SizedBox(
-              width: 25,
-              child: CountryFlags.flag('fr'),
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: MaterialButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              minWidth: 15,
+              onPressed: () {
+                selectLanguage();
+              },
+              child: SizedBox(
+                width: 25,
+                child: CountryFlags.flag(selectedLanguage),
+              ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(right: 20),
-            child: Icon(Icons.share),
+          Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 10, right: 10),
+            child: MaterialButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                minWidth: 15,
+                onPressed: () {},
+                child: const Icon(Icons.share)),
           ),
         ],
       ),
