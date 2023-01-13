@@ -25,7 +25,11 @@ class MyApp extends StatelessWidget {
           // Notice that the counter didn't reset back to zero; the application
           // is not restarted.
           primarySwatch: Colors.blueGrey,
-          scaffoldBackgroundColor: Colors.white,
+          scaffoldBackgroundColor: Colors.transparent,
+          appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.indigo,
+              iconTheme: IconThemeData(color: Colors.white),
+              toolbarHeight: 50),
           fontFamily: GoogleFonts.inter().fontFamily),
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
